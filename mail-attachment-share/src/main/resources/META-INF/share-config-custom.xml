@@ -1,0 +1,36 @@
+<alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/mail-attachment-share/js/actions/mail-action.js" />
+            </dependencies>
+        </forms>
+    </config>
+
+    <config replace="false" evaluator="string-compare" condition="DocumentLibrary">
+        <multi-select>
+            <!-- <action type="action-link" id="onActionDownload" icon="document-download"
+                label="menu.selected-items.download" />
+            <action type="action-link" id="onActionCopyTo" icon="document-copy-to"
+                label="menu.selected-items.copy" />
+            <action type="action-link" id="onActionMoveTo" icon="document-move-to"
+                permission="Delete" label="menu.selected-items.move" />
+            <action type="action-link" id="onActionAssignWorkflow" asset="document"
+                icon="document-assign-workflow" label="menu.selected-items.assign-workflow" />
+            <action type="action-link" id="onActionDelete" icon="document-delete"
+                permission="Delete" label="menu.selected-items.delete" notAspect="hwf:hybridWorkflow,sys:undeletable" /> -->
+
+            <!-- ADD TO ATOS E-SUITE -->
+            <action type="action-link" id="onActionMailAttachment" label="menu.send-mail-attachment"
+                asset="document" />
+
+            <!-- <action type="action-link" id="onActionCloudSync" asset="document"
+                icon="document-cloud-sync" permission="CreateChildren"
+                label="menu.selected-items.cloudSync" notAspect="sync:syncSetMemberNode"
+                syncMode="ON_PREMISE" />
+            <action type="action-link" id="onActionCloudSyncRequest" icon="document-request-sync"
+                label="menu.selected-items.cloudRequestSync" hasAspect="sync:syncSetMemberNode"
+                syncMode="ON_PREMISE" />-->
+        </multi-select>
+    </config>
+</alfresco-config>
