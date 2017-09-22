@@ -2,7 +2,7 @@
     <config>
         <forms>
             <dependencies>
-                <js src="/mail-attachment-share/js/actions/mail-action.js" />
+                <js src="/resources/mail-attachment-share/js/actions/mail-action.js" />
             </dependencies>
         </forms>
     </config>

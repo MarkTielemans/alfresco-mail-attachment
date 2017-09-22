@@ -9,7 +9,7 @@ MailAttachment.Actions = {};
 
 	function createIconStyle() {
 		var styleText = '/* This style is added as part of the MailAttachment connection extension. */';
-		styleText += '\n.toolbar .onActionMailAttachment { background-image: url(/share/res/mail-attachment-share/documentlibrary/actions/send-attachment-icon-16.png); }';
+		styleText += '\n.toolbar .onActionMailAttachment { background-image: url(/share/res/resources/mail-attachment-share/documentlibrary/actions/send-attachment-icon-16.png); }';
 		
 		var style = document.createElement('style');
 		style.type = 'text/css';
@@ -49,26 +49,26 @@ MailAttachment.Actions = {};
 
 (function() {
 	if (Alfresco.DocumentList) {
-		YAHOO.lang.augmentProto(Alfresco.DocumentList, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.DocumentList, MailAttachment.Actions);
 	}
 
 	if (Alfresco.DocListToolbar) {
-		YAHOO.lang.augmentProto(Alfresco.DocListToolbar, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.DocListToolbar, MailAttachment.Actions);
 	}
 
 	if (Alfresco.DocumentActions) {
-		YAHOO.lang.augmentProto(Alfresco.DocumentActions, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.DocumentActions, MailAttachment.Actions);
 	}
 
 	if (Alfresco.FolderActions) {
-		YAHOO.lang.augmentProto(Alfresco.FolderActions, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.FolderActions, MailAttachment.Actions);
 	}
 
 	if (Alfresco.doclib.Actions) {
-		YAHOO.lang.augmentProto(Alfresco.doclib.Actions, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.doclib.Actions, MailAttachment.Actions);
 	}
 
 	if (Alfresco.doclib.FolderActions) {
-		YAHOO.lang.augmentProto(Alfresco.doclib.FolderActions, OS.doclib.Actions);
+		YAHOO.lang.augmentProto(Alfresco.doclib.FolderActions, MailAttachment.Actions);
 	}
 })();
