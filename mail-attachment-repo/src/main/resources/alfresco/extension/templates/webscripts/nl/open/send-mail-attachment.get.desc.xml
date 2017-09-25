@@ -1,0 +1,7 @@
+<webscript>
+   <shortname>Send mail with attachment</shortname>
+   <url>/api/mail-with-attachment/send</url>
+   <authentication>user</authentication>
+   <format default="html" />
+   <family>mail-with-attachments</family>
+</webscript>
