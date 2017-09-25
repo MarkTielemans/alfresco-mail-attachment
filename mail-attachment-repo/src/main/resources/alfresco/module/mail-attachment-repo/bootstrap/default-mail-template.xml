@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view:view xmlns:cm="http://www.alfresco.org/model/content/1.0"
+		   xmlns:view="http://www.alfresco.org/view/repository/1.0"
+		   xmlns:sys="http://www.alfresco.org/model/system/1.0"
+		   xmlns:app="http://www.alfresco.org/model/application/1.0"
+		   xmlns:acme="http://www.acme.org/model/content/1.0">
+<acme:document view:childName="cm:default-mail-with-attachments-template.ftl">
+	<view:aspects>
+		<sys:referenceable></sys:referenceable>
+		<app:inlineeditable></app:inlineeditable>
+	</view:aspects>
+	<view:acl></view:acl>
+	<view:properties>
+		<cm:name>default-mail-with-attachments-template.ftl</cm:name>
+		<sys:store-identifier>SpacesStore</sys:store-identifier>
+		<cm:content>contentUrl=classpath:alfresco/module/mail-attachment-repo/bootstrap/default-mail-with-attachments-template.ftl|mimetype=text/html|size=0|encoding=UTF-8|locale=en_GB_</cm:content>
+		<app:editInline>true</app:editInline>
+		<sys:store-protocol>workspace</sys:store-protocol>
+	</view:properties>
+</acme:document>
+</view:view>

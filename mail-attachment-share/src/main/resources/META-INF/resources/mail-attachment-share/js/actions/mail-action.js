@@ -10,40 +10,33 @@ MailAttachment.Actions = {};
 	function createIconStyle() {
 		var styleText = '/* This style is added as part of the MailAttachment connection extension. */';
 		styleText += '\n.toolbar .onActionMailAttachment { background-image: url(/share/res/resources/mail-attachment-share/documentlibrary/actions/send-attachment-icon-16.png); }';
-		
+
 		var style = document.createElement('style');
 		style.type = 'text/css';
 		if (style.styleSheet){
-		    style.styleSheet.cssText = styleText;
+			style.styleSheet.cssText = styleText;
 		} else {
-		    style.appendChild(document.createTextNode(styleText));
+			style.appendChild(document.createTextNode(styleText));
 		}
 		document.getElementsByTagName('head')[0].appendChild(style);
 	}
-	
+
 	createIconStyle();
-	
+
 	MailAttachment.Actions.prototype = {
-		/**
-		 * @param record array of nodes actioned upon
-		 */
+			/**
+			 * @param record array of nodes actioned upon
+			 */
 			onActionMailAttachment : function _onActionMailAttachment(records) {
-			var nodeRefs = '';
-			records.forEach(function(item, index) {
-				var uuid = item.nodeRef.replace('workspace://SpacesStore/', '')
-				nodeRefs += uuid + ',';
-			});
-			nodeRefs = nodeRefs.substring(0, nodeRefs.length - 1);
-			var url = '/share/openatos/archiveren/index.html#' + nodeRefs;
-			var windowOptions = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, height=600, width=900';
-			window.open(url, 'documentarchive', windowOptions);
-		},
-	
-		onActionMailAttachmentSingleNode : function _onActionMailAttachmentSingleNode (record) {
-			var url = '/share/openatos/archiveren/index.html#' + record.nodeRef.replace('workspace://SpacesStore/', '');
-			var windowOptions = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, height=600, width=900';
-			window.open(url, 'documentarchive', windowOptions);
-		}
+				var owner = {
+						className: 'onActionMailAttachment'
+				};
+				
+				var config = this.generateConfigForFormDialogAction(record, owner);
+
+				// Finally display form as dialog
+				Alfresco.util.PopupManager.displayForm(config);
+			}
 	};
 })();
 

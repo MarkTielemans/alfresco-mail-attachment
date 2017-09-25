@@ -13,8 +13,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<bean id="webscript.nl.open.send-mail-attachment.get"
+    
+	<bean id="webscripts.nl.open.send-mail-attachment.post"
 		class="nl.open.mail.EmailAttachmentWebScript"
 		parent="webscript">
+		<property name="emailWithAttachmentsService">
+			<ref bean="nl.open.mail-with-attachments-service"></ref>
+		</property>
 	</bean>
 </beans>
