@@ -18,7 +18,7 @@ public class DefaultTemplateRefCache {
                 if (defaultTemplateRef == null) {
                     final SearchParameters sp = new SearchParameters();
                     sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-                    sp.setQuery(String.format("PATH:\"\"%s\"", path));
+                    sp.setQuery(String.format("PATH:\"%s\"", path));
                     sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
                     sp.setMaxItems(1);
 
