@@ -14,7 +14,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     
-	<bean id="webscripts.nl.open.send-mail-attachment.post"
+	<bean id="webscript.nl.open.send-mail-attachment.post"
 		class="nl.open.mail.EmailAttachmentWebScript"
 		parent="webscript">
 		<property name="emailWithAttachmentsService">

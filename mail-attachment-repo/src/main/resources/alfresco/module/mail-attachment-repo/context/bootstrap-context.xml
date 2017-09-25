@@ -8,10 +8,10 @@
         class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch"
         parent="basePatch">
         <property name="id">
-            <value>org.alfresco.tutorial.bootstrap.patch.foldersAndFilesLoader</value>
+            <value>nl.open.mailTemplateDefault</value>
         </property>
         <property name="description">
-            <value>org.alfresco.tutorial.bootstrap.patch.foldersAndFilesLoader.description</value>
+            <value>nl.open.mailTemplateDefault.description</value>
         </property>
         <property name="fixesFromSchema">
             <value>0</value>
