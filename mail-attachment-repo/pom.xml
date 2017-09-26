@@ -230,7 +230,7 @@
                       If 'false' - rebel.xml is generated if timestamps of pom.xml and the current rebel.xml file are not equal.
                       If 'true' - rebel.xml will always be generated
                     -->
-                    <alwaysGenerate>true</alwaysGenerate>
+                    <alwaysGenerate>false</alwaysGenerate>
                 </configuration>
             </plugin>
 

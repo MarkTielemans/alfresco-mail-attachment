@@ -6,10 +6,10 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.activation.DataHandler;
 import javax.mail.Address;
@@ -23,6 +23,10 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.jscript.People;
+import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.jscript.ScriptUtils;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
@@ -31,9 +35,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.TemplateService;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.security.PersonService;
-import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang3.StringUtils;
+import org.alfresco.util.UrlUtil;
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -45,9 +47,12 @@ public class EMailWithAttachmentsService {
     private String defaultTemplatePath;
     private JavaMailSender mailService;
     private NodeService nodeService;
-    private PersonService personService;
+    private People people;
+    private ScriptUtils scriptUtils;
     private SearchService searchService;
+    private SysAdminParams sysAdminParams;
     private TemplateService templateService;
+    private ScriptNode person;
 
     public EMailWithAttachmentsService(final String defaultTemplatePath) {
         this.defaultTemplatePath = defaultTemplatePath;
@@ -95,7 +100,7 @@ public class EMailWithAttachmentsService {
         emailTask.setTemplateModel(getTemplateModel(emailTask));
         final String body = templateService.processTemplate(emailTask.getTemplate().toString(), emailTask.getTemplateModel());
         final MimeBodyPart bodyText = new MimeBodyPart();
-        bodyText.setText(body);
+        bodyText.setText(body, null, "html");
         return bodyText;
     }
 
@@ -113,16 +118,10 @@ public class EMailWithAttachmentsService {
     public void sendEmail(final EmailWithAttachmentsTask emailTask) throws IOException {
         try {
             final MimeMessage mimeMessage = mailService.createMimeMessage();
+            person = people.getPerson(AuthenticationUtil.getFullyAuthenticatedUser());
+            final String senderEmail = (String) person.getProperties().get(ContentModel.PROP_EMAIL.toPrefixString());
 
-            if (StringUtils.isBlank(emailTask.getSender())) {
-                // Use e-mail address of current user as sender
-                final String curUser = AuthenticationUtil.getFullyAuthenticatedUser();
-                final NodeRef person = personService.getPerson(curUser);
-                final String senderEmail = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
-                emailTask.setSender(senderEmail);
-            }
-
-            mimeMessage.setFrom(new InternetAddress(emailTask.getSender()));
+            mimeMessage.setFrom(new InternetAddress(senderEmail));
             mimeMessage.setRecipients(Message.RecipientType.TO, getAddresses(emailTask.getRecipients()));
             mimeMessage.setSubject(emailTask.getSubject());
             mimeMessage.setHeader("Content-Transfer-Encoding", "text/html; charset=UTF-8");
@@ -148,13 +147,21 @@ public class EMailWithAttachmentsService {
     public final void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-    public final void setPersonService(final PersonService personService) {
-        this.personService = personService;
-    }
     
+    public final void setPeople(final People people) {
+        this.people = people;
+    }
+
     public final void setSearchService(final SearchService searchService) {
         this.searchService = searchService;
+    }
+    
+    public final void setScriptUtils(final ScriptUtils scriptUtils) {
+        this.scriptUtils = scriptUtils;
+    }
+    
+    public final void setSysAdminParams(final SysAdminParams sysAdminParams) {
+        this.sysAdminParams = sysAdminParams;
     }
 
     public final void setTemplateService(final TemplateService templateService) {
@@ -162,20 +169,18 @@ public class EMailWithAttachmentsService {
     }
 
     private Map<String, Serializable> getTemplateModel(final EmailWithAttachmentsTask emailTask) {
-        final List<Map<String, Serializable>> nodes = new ArrayList<>(emailTask.getAttachments().length);
+        final List<ScriptNode> nodes = new ArrayList<>(emailTask.getAttachments().length);
 
         for (final NodeRef attachment : emailTask.getAttachments()) {
-            final Map<QName, Serializable> props = nodeService.getProperties(attachment);
-            final Map<String, Serializable> nodeProps = new HashMap<>(props.size());
-            for (final Entry<QName, Serializable> prop : props.entrySet()) {
-                nodeProps.put(prop.getKey().toPrefixString(), prop.getValue());
-            }
-
-            nodes.add(nodeProps);
+            final ScriptNode sn = scriptUtils.getNodeFromString(attachment.toString());
+            nodes.add(sn);
         }
-
+        
         final Map<String, Serializable> model = new HashMap<>(1);
         model.put("nodes", (Serializable) nodes);
+        model.put("person", person);
+        model.put("shareUrl", UrlUtil.getShareUrl(sysAdminParams));
+        model.put("date", new Date());
         return model;
     }
 }
