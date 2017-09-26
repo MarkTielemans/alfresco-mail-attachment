@@ -9,19 +9,17 @@ public class EmailWithAttachmentsTask {
 
 	private NodeRef[] attachments;
 	private String[] recipients;
-	private String sender;
 	private String subject;
 	private NodeRef template;
 	private Map<String, Serializable> templateModel;
 
 	public EmailWithAttachmentsTask() {}
 	
-	public EmailWithAttachmentsTask(final NodeRef[] attachments, final String[] recipients, final String sender, final String subject, 
+	public EmailWithAttachmentsTask(final NodeRef[] attachments, final String[] recipients, final String subject, 
 			final NodeRef template, final Map<String, Serializable> templateModel) {
 		super();
 		this.attachments = attachments;
 		this.recipients = recipients;
-		this.sender = sender;
 		this.subject = subject;
 		this.template = template;
 		this.templateModel = templateModel;
@@ -33,10 +31,6 @@ public class EmailWithAttachmentsTask {
 
 	public String[] getRecipients() {
 		return recipients;
-	}
-
-	public String getSender() {
-		return sender;
 	}
 
 	public String getSubject() {
@@ -57,10 +51,6 @@ public class EmailWithAttachmentsTask {
 	
 	public void setRecipients(final String... recipients) {
 		this.recipients = recipients;
-	}
-
-	public void setSender(final String sender) {
-		this.sender = sender;
 	}
 
 	public void setSubject(final String subject) {

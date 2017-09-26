@@ -50,11 +50,17 @@
         <property name="nodeService">
             <ref bean="NodeService" />
         </property>
-        <property name="personService">
-            <ref bean="PersonService" />
+        <property name="people">
+            <ref bean="peopleScript" />
+        </property>
+        <property name="scriptUtils">
+            <ref bean="utilsScript" />
         </property>
         <property name="searchService">
             <ref bean="SearchService" />
+        </property>
+        <property name="sysAdminParams">
+            <ref bean="sysAdminParams" />
         </property>
         <property name="templateService">
             <ref bean="TemplateService" />

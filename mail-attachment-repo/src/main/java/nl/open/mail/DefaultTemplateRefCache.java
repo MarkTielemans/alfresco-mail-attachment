@@ -29,7 +29,7 @@ public class DefaultTemplateRefCache {
                             if (rs.length() == 1) {
                                 return rs.getNodeRef(0);
                             } else {
-                                throw new IllegalArgumentException("Unresolvable path: " + path);
+                                throw new IllegalArgumentException("Template file not found at " + path);
                             }
                         }
                     });
