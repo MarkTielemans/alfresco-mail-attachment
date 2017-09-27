@@ -1,33 +1,57 @@
 <alfresco-config>
-	<config>
-		<forms>
-			<dependencies>
-				<js src="/resources/mail-attachment-share/js/actions/mail-action.js" />
-			</dependencies>
-		</forms>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/resources/mail-attachment-share/js/actions/mail-action.js" />
+            </dependencies>
+        </forms>
+    </config>
+
+    <config replace="false" evaluator="string-compare" condition="DocumentLibrary">
+        <multi-select>
+            <!-- <action type="action-link" id="onActionDownload" icon="document-download"
+                label="menu.selected-items.download" />
+            <action type="action-link" id="onActionCopyTo" icon="document-copy-to"
+                label="menu.selected-items.copy" />
+            <action type="action-link" id="onActionMoveTo" icon="document-move-to"
+                permission="Delete" label="menu.selected-items.move" />
+            <action type="action-link" id="onActionAssignWorkflow" asset="document"
+                icon="document-assign-workflow" label="menu.selected-items.assign-workflow" />
+            <action type="action-link" id="onActionDelete" icon="document-delete"
+                permission="Delete" label="menu.selected-items.delete" notAspect="hwf:hybridWorkflow,sys:undeletable" /> -->
+
+            <!-- ADD TO ATOS E-SUITE -->
+            <action type="action-link" id="onActionMailAttachment" label="menu.send-mail-attachment"
+                asset="document" />
+                
+            <!-- <action type="action-link" id="onActionCloudSync" asset="document"
+                icon="document-cloud-sync" permission="CreateChildren"
+                label="menu.selected-items.cloudSync" notAspect="sync:syncSetMemberNode"
+                syncMode="ON_PREMISE" />
+            <action type="action-link" id="onActionCloudSyncRequest" icon="document-request-sync"
+                label="menu.selected-items.cloudRequestSync" hasAspect="sync:syncSetMemberNode"
+                syncMode="ON_PREMISE" />-->
+        </multi-select>
+    </config>
+    
+    
+    <config evaluator="string-compare" condition="send-as-email"> <!-- ID for the Repository Action that this form is associated with -->
+                <forms>
+                    <form>
+                        <field-visibility>
+                            <show id="recipients"/>
+                            <show id="subject"/>
+                            <show id="template"/>
+                        </field-visibility>
+                        <appearance>
+                            <field id="recipients" label-id="send-email.form.field.recipients"/>
+                            <field id="subject" label-id="send-email.form.field.subject"/>
+                            <field id="template" label-id="send-email.form.field.template">
+                                <control template="/org/alfresco/components/form/controls/textarea.ftl" />
+                            </field>
+                        </appearance>
+                    </form>
+                </forms>
 	</config>
 	
-	<config evaluator="string-compare" condition="mail-attachments-send">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="recipient" />
-					<show id="subject" />
-					<show id="template" />
-				</field-visibility>
-				<appearance>
-					<field id="recipient" label="To" />
-					<field id="subject" label="Subject" />
-					<field id="template" label="E-mail template" />
-				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config replace="false" evaluator="string-compare" condition="DocumentLibrary">
-		<multi-select>
-			<action type="action-link" id="onActionMailAttachment" label="menu.send-mail-attachment"
-				asset="document" />
-		</multi-select>
-	</config>
 </alfresco-config>
