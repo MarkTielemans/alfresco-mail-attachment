@@ -31,11 +31,78 @@ MailAttachment.Actions = {};
 				var owner = {
 						className: 'onActionMailAttachment'
 				};
-				
-				var config = this.generateConfigForFormDialogAction(record, owner);
+		         
+		         // this nodeRef is the destination for the action
+				 // the action does only work with one document
+		         var node1 = records[0].nodeRef;
 
-				// Finally display form as dialog
-				Alfresco.util.PopupManager.displayForm(config);
+		         // Set the params for the action like in the share-config
+		         var action = this.getAction(records, owner),
+	               params = {
+		             	itemKind: "action",
+		             	itemId: "send-as-email",
+		             	mode: "create",
+		             	destination: node1,
+		             	successMessage: "e-mail was sent!",
+		             	failureMessage: "Couldn't sent e-mail!"
+		             },
+		            config =
+		            {
+		        	 title: this.msg("Send e-mail with attachment(s)")
+		            }
+
+		         // Make sure we don't pass the function as a form parameter
+		         delete params["function"];
+
+		         // Add configured success callback
+		         var success = params["success"];
+		         delete params["success"];
+		         config.success =
+		         {
+		            fn: function(response, obj)
+		            {
+		               // Invoke callback if configured and available
+		               if (YAHOO.lang.isFunction(this[success]))
+		               {
+		                  this[success].call(this, response, obj);
+		               }
+
+		               // Fire metadataRefresh so other components may update themselves
+		               YAHOO.Bubbling.fire("metadataRefresh", obj);
+		            },
+		            obj: records,
+		            scope: this
+		         };
+
+		         // Add configure success message
+		         if (params.successMessage)
+		         {
+		            config.successMessage = this.msg(params.successMessage);
+		            delete params["successMessage"];
+		         }
+
+		         // Add configured failure callback
+		         if (YAHOO.lang.isFunction(this[params.failure]))
+		         {
+		            config.failure =
+		            {
+		               fn: this[params.failure],
+		               obj: records,
+		               scope: this
+		            };
+		            delete params["failure"];
+		         }
+		         // Add configure success message
+		         if (params.failureMessage)
+		         {
+		            config.failureMessage = this.msg(params.failureMessage);
+		            delete params["failureMessage"];
+		         }
+
+		         // Use the remaining properties as form properties
+		         config.properties = params;
+
+		         Alfresco.util.PopupManager.displayForm(config);
 			}
 	};
 })();
