@@ -33,13 +33,34 @@ MailAttachment.Actions = {};
 				};
 				
 				var actionUrl = Alfresco.constants.PROXY_URI + "/api/mail-with-attachment/send";
+				var data = [];
+				
+				for (i=0; i<records.length; i++) {
+					data.push(records[i].nodeRef);
+				}
+				
+				alert(data);	
 
-				this.modules.sendEmail = new Alfresco.module.SimpleDialog(this.id + "-sendEmail").setOptions(
+				this.modules.sendEmail = new Alfresco.module.SimpleDialog(this.id).setOptions(
 				         {
 				            width: "30em",
 				            templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "forms/send-mail",
 				            actionUrl: actionUrl,
-				            firstFocus: this.id + "-sendEmail-type",
+				            doBeforeDialogShow:
+				              {
+				                 fn: function(formsRuntime, emailDialogObject){
+				                	 var dialog = this.id;
+				                    this.form.submitElements[0].set('label','Send');
+				                   var dialogHeader = Dom.get(dialog + '-dialogTitle');
+				                   dialogHeader.innerHTML = "Email Form";
+				                
+				                    var field = document.getElementById('attachments');
+				                    field.innerHTML = data[0];
+				                 },
+				                 obj: null,
+				                 scope: null
+				              },
+				            //firstFocus: this.id + "-sendEmail-type",
 				            onSuccess:
 				            {
 				               fn: function dlA_onActionMailAttachment_success(response)
