@@ -1,6 +1,6 @@
 <webscript>
-    <shortname>Simple Page</shortname>
-    <description>Simple page definition</description>
+    <shortname>Mail Form</shortname>
+    <description>Send Mail Form Dialog</description>
     <family>Share</family>
-    <url>/simple-page</url>
+    <url>/forms/send-mail</url>
 </webscript>
