@@ -7,3 +7,4 @@
 * Allow e-mailing a direct-link instead
 * Enhance form visually (Aikau?)
 * Examine possibilities for sending an e-mail asynchronously for better performance
+* Show attachments in send form
