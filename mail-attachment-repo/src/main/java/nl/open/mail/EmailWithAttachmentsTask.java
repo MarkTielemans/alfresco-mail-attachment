@@ -12,8 +12,9 @@ public class EmailWithAttachmentsTask {
 	private String subject;
 	private NodeRef template;
 	private Map<String, Serializable> templateModel;
+	private boolean sendLinkOnly = false;
 
-	public EmailWithAttachmentsTask() {}
+    public EmailWithAttachmentsTask() {}
 	
 	public EmailWithAttachmentsTask(final NodeRef[] attachments, final String[] recipients, final String subject, 
 			final NodeRef template, final Map<String, Serializable> templateModel) {
@@ -45,23 +46,31 @@ public class EmailWithAttachmentsTask {
 		return templateModel;
 	}
 
+	public boolean isSendLinkOnly() {
+        return sendLinkOnly;
+    }
+	
 	public void setAttachments(final NodeRef... attachments) {
 		this.attachments = attachments;
 	}
-	
+
 	public void setRecipients(final String... recipients) {
 		this.recipients = recipients;
 	}
 
+	public void setSendLinkOnly(final boolean sendLinkOnly) {
+        this.sendLinkOnly = sendLinkOnly;
+    }
+
 	public void setSubject(final String subject) {
 		this.subject = subject;
 	}
-
+	
 	public void setTemplate(final NodeRef template) {
 		this.template = template;
 	}
 
-	public void setTemplateModel(final Map<String, Serializable> templateModel) {
+    public void setTemplateModel(final Map<String, Serializable> templateModel) {
 		this.templateModel = templateModel;
 	}
 }

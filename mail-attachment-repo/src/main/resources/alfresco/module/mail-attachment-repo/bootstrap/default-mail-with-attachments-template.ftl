@@ -50,7 +50,15 @@
                                              <#if person.properties.lastName?exists> ${person.properties.lastName}</#if>
                                              has sent you files.
 
-                                             <p>You can find your files attached to this e-mail.
+                                             <#if !linksOnly><p>You can find your files attached to this e-mail.</p></#if>
+                                             
+                                             <p>The files can <#if !linksOnly>also</#if> be found in Alfresco:<br />
+                                                <ul>
+                                                    <#list links as link>
+                                                        <a href="${link.url}" target="_blank">${link.text} </a>
+                                                    </#list>
+                                                </ul>
+                                             </p>
                                              
                                              <p>Sincerely,<br />
                                              Alfresco</p>

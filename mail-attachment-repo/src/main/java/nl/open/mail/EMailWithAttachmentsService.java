@@ -2,6 +2,8 @@ package nl.open.mail;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.People;
@@ -82,8 +85,10 @@ public class EMailWithAttachmentsService {
         mail.addBodyPart(getMessageBody(emailTask));
         mimeMessage.setContent(mail);
 
-        for (final NodeRef nodeRef : emailTask.getAttachments()) {
-            addAttachment(nodeRef, mail);
+        if (!emailTask.isSendLinkOnly()) {
+            for (final NodeRef nodeRef : emailTask.getAttachments()) {
+                addAttachment(nodeRef, mail);
+            }
         }
     }
 
@@ -106,17 +111,26 @@ public class EMailWithAttachmentsService {
 
     private Map<String, Serializable> getTemplateModel(final EmailWithAttachmentsTask emailTask) {
         final List<ScriptNode> nodes = new ArrayList<>(emailTask.getAttachments().length);
+        final List<Map<String, String>> links = new ArrayList<>(emailTask.getAttachments().length);
 
         for (final NodeRef attachment : emailTask.getAttachments()) {
             final ScriptNode sn = scriptUtils.getNodeFromString(attachment.toString());
             nodes.add(sn);
+
+            final Map<String, String> link = new HashMap<>(2);
+            link.put("url", getExternalLink(attachment));
+            link.put("text", (String) nodeService.getProperty(attachment, ContentModel.PROP_NAME));
+            links.add(link);
         }
-        
+
         final Map<String, Serializable> model = new HashMap<>(1);
         model.put("nodes", (Serializable) nodes);
         model.put("person", person);
         model.put("shareUrl", UrlUtil.getShareUrl(sysAdminParams));
         model.put("date", new Date());
+        model.put("links", (Serializable) links);
+        model.put("linksOnly", emailTask.isSendLinkOnly());
+
         return model;
     }
 
@@ -148,7 +162,7 @@ public class EMailWithAttachmentsService {
     public final void setMailService(final JavaMailSender mailService) {
         this.mailService = mailService;
     }
-    
+
     public final void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -156,11 +170,11 @@ public class EMailWithAttachmentsService {
     public final void setPeople(final People people) {
         this.people = people;
     }
-    
+
     public final void setScriptUtils(final ScriptUtils scriptUtils) {
         this.scriptUtils = scriptUtils;
     }
-    
+
     public final void setSearchService(final SearchService searchService) {
         this.searchService = searchService;
     }
@@ -171,5 +185,15 @@ public class EMailWithAttachmentsService {
 
     public final void setTemplateService(final TemplateService templateService) {
         this.templateService = templateService;
+    }
+
+    private String getExternalLink(final NodeRef attachment) {
+        try {
+            return String.format("%s/page/document-details?nodeRef=%s", 
+                    UrlUtil.getShareUrl(sysAdminParams), 
+                    URLEncoder.encode(attachment.toString(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new AlfrescoRuntimeException("Error sending mail", e);
+        }
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 public class EmailAttachmentWebScript extends DeclarativeWebScript {
 
+    private static final String PARAM_AS_LINK = "asLinks";
     private static final String PARAM_ATTACHMENTS = "attachments";
     private static final String PARAM_RECIPIENTS = "recipients";
     private static final String PARAM_SUBJECT = "subject";
@@ -59,6 +60,10 @@ public class EmailAttachmentWebScript extends DeclarativeWebScript {
 
         if (StringUtils.isNotBlank(req.getParameter(PARAM_TEMPLATE))) {
             task.setTemplate(new NodeRef(req.getParameter(PARAM_TEMPLATE)));
+        }
+        
+        if (StringUtils.isNotBlank(req.getParameter(PARAM_AS_LINK))) {
+            task.setSendLinkOnly("on|true".contains(req.getParameter(PARAM_AS_LINK)));
         }
 
         try {

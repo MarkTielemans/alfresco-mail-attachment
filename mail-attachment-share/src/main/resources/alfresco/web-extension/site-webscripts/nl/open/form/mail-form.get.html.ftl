@@ -17,6 +17,10 @@
                     </#list>
                 </div>
             </p>
+            <p>
+                <input type="checkbox" name="asLinks" />
+                <label for="links-only">${msg("send-email.form.field.links-only")}:</label>&nbsp;&nbsp;
+            </p>
          </div>
          <div class="bdft">
             <input type="button" id="${el}-ok" value="${msg("button.ok")}" tabindex="0" />
