@@ -1,1 +1,1 @@
-# alfresco-mail-attachment
+# Send files as e-mail attachments from Alfresco Share
