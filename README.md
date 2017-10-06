@@ -11,3 +11,4 @@
 * Calculate cummulative filesize and show warning if >10MB
 * Support folders (?)
 * Set cm:emailed aspect on e-mailed nodes (optionally)
+* Add a custom text body to the e-mail, from the form
