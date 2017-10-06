@@ -23,10 +23,6 @@ public class EmailAttachmentWebScript extends DeclarativeWebScript {
 
     private static final Logger logger = LogManager.getLogger(EmailAttachmentWebScript.class);
 
-    public final void setEmailWithAttachmentsService(EMailWithAttachmentsService emailWithAttachmentsService) {
-        this.emailWithAttachmentsService = emailWithAttachmentsService;
-    }
-
     private EMailWithAttachmentsService emailWithAttachmentsService;
 
     protected NodeRef[] asNodeRefs(final String... refs) {
@@ -37,7 +33,7 @@ public class EmailAttachmentWebScript extends DeclarativeWebScript {
 
         return nodeRefs;
     }
-    
+
     private void checkAvailability(final WebScriptRequest req, final Status status, final String... paramKeys) {
         try {
             for (final String paramKey : paramKeys) {
@@ -73,5 +69,9 @@ public class EmailAttachmentWebScript extends DeclarativeWebScript {
             status.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
+    }
+
+    public final void setEmailWithAttachmentsService(final EMailWithAttachmentsService emailWithAttachmentsService) {
+        this.emailWithAttachmentsService = emailWithAttachmentsService;
     }
 }

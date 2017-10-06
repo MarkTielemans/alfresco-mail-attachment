@@ -39,7 +39,7 @@
     </bean>
     
     <bean id="nl.open.mail-with-attachments-service" class="nl.open.mail.EMailWithAttachmentsService"
-        init-method="init" depends-on="nl.open.defaultTemplateLoader">
+        depends-on="nl.open.defaultTemplateLoader">
         <constructor-arg type="java.lang.String" value="/${spaces.company_home.childname}/${spaces.dictionary.childname}/${spaces.templates.email.childname}/cm:default-mail-with-attachments-template.ftl" />
         <property name="contentService">
             <ref bean="ContentService" />

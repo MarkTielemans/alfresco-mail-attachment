@@ -104,15 +104,20 @@ public class EMailWithAttachmentsService {
         return bodyText;
     }
 
-    public void init() {
-        // This seems to cause a hang
-        //		try {
-        //			logger.debug("Resolving default template ref at path: " + this.defaultTemplatePath);
-        //			final NodeRef nr = DefaultTemplateRefCache.getValue(defaultTemplatePath, searchService);
-        //			logger.info("Resolved default template at " + nr.toString());
-        //		} catch (final IllegalArgumentException iae) {
-        //			logger.warn("Default template couldn't be resolved on startup", iae);
-        //		}
+    private Map<String, Serializable> getTemplateModel(final EmailWithAttachmentsTask emailTask) {
+        final List<ScriptNode> nodes = new ArrayList<>(emailTask.getAttachments().length);
+
+        for (final NodeRef attachment : emailTask.getAttachments()) {
+            final ScriptNode sn = scriptUtils.getNodeFromString(attachment.toString());
+            nodes.add(sn);
+        }
+        
+        final Map<String, Serializable> model = new HashMap<>(1);
+        model.put("nodes", (Serializable) nodes);
+        model.put("person", person);
+        model.put("shareUrl", UrlUtil.getShareUrl(sysAdminParams));
+        model.put("date", new Date());
+        return model;
     }
 
     public void sendEmail(final EmailWithAttachmentsTask emailTask) throws IOException {
@@ -143,44 +148,28 @@ public class EMailWithAttachmentsService {
     public final void setMailService(final JavaMailSender mailService) {
         this.mailService = mailService;
     }
-
+    
     public final void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
     }
-    
+
     public final void setPeople(final People people) {
         this.people = people;
-    }
-
-    public final void setSearchService(final SearchService searchService) {
-        this.searchService = searchService;
     }
     
     public final void setScriptUtils(final ScriptUtils scriptUtils) {
         this.scriptUtils = scriptUtils;
     }
     
+    public final void setSearchService(final SearchService searchService) {
+        this.searchService = searchService;
+    }
+
     public final void setSysAdminParams(final SysAdminParams sysAdminParams) {
         this.sysAdminParams = sysAdminParams;
     }
 
     public final void setTemplateService(final TemplateService templateService) {
         this.templateService = templateService;
-    }
-
-    private Map<String, Serializable> getTemplateModel(final EmailWithAttachmentsTask emailTask) {
-        final List<ScriptNode> nodes = new ArrayList<>(emailTask.getAttachments().length);
-
-        for (final NodeRef attachment : emailTask.getAttachments()) {
-            final ScriptNode sn = scriptUtils.getNodeFromString(attachment.toString());
-            nodes.add(sn);
-        }
-        
-        final Map<String, Serializable> model = new HashMap<>(1);
-        model.put("nodes", (Serializable) nodes);
-        model.put("person", person);
-        model.put("shareUrl", UrlUtil.getShareUrl(sysAdminParams));
-        model.put("date", new Date());
-        return model;
     }
 }

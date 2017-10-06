@@ -1,17 +1,22 @@
 <#assign el=args.htmlid?html>
 
-
 <div id="${el}-dialog" class="send-mail">
    <div id="${el}-dialogTitle" class="hd">${msg("title")}</div>
    <div class="bd">
-      <form id="${el}-form" action="" method="post">
+      <form id="${el}-form" action="" method="post" enctype="application/x-www-form-urlencoded">
          <div class="yui-gd">
-    <label for="recipients">Recipients:</label>&nbsp;&nbsp;
-    <p><input type="text" name="recipients" /></p>
-    <label for="subject">Subject:</label>&nbsp;&nbsp;
-    <p><input type="text" name="subject" /></p>
-    <label for="attachments">Attachments:</label>&nbsp;&nbsp;    
-		<div id="attachments" name="attachments"></div><br />
+            <label for="recipients">${msg("send-email.form.field.recipients")}:</label>&nbsp;&nbsp;
+            <p>
+              <input type="text" name="recipients" title="${msg("send-email.form.field.recipients.description")}" /></p>
+              <label for="subject">${msg("send-email.form.field.subject")}:</label>&nbsp;&nbsp;
+            <p>
+                <input type="text" name="subject" />
+                <div id="attachments-container">
+                    <#list args.attachmentRefs?split(",") as attachment>
+                        <input type="hidden" name="attachments" value="${attachment}" />
+                    </#list>
+                </div>
+            </p>
          </div>
          <div class="bdft">
             <input type="button" id="${el}-ok" value="${msg("button.ok")}" tabindex="0" />

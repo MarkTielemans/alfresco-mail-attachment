@@ -32,30 +32,28 @@ MailAttachment.Actions = {};
 						className: 'onActionMailAttachment'
 				};
 				
-				var actionUrl = Alfresco.constants.PROXY_URI + "/api/mail-with-attachment/send";
-				var data = [];
-				
-				for (i=0; i<records.length; i++) {
-					data.push(records[i].nodeRef);
+				var actionUrl = Alfresco.constants.PROXY_URI + "api/mail-with-attachment/send";
+				var refs = [];
+				for (i = 0; i < records.length; i++) {
+					refs.push(records[i].nodeRef);
 				}
 				
-				alert(data);	
-
 				this.modules.sendEmail = new Alfresco.module.SimpleDialog(this.id).setOptions(
 				         {
 				            width: "30em",
 				            templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "forms/send-mail",
+				            templateRequestParams: {
+				            	attachmentRefs: refs
+				            },
 				            actionUrl: actionUrl,
 				            doBeforeDialogShow:
 				              {
 				                 fn: function(formsRuntime, emailDialogObject){
-				                	 var dialog = this.id;
-				                    this.form.submitElements[0].set('label','Send');
+				                   var dialog = this.id;
+				                   this.form.submitElements[0].set('label','Send');
 				                   var dialogHeader = Dom.get(dialog + '-dialogTitle');
-				                   dialogHeader.innerHTML = "Email Form";
-				                
-				                    var field = document.getElementById('attachments');
-				                    field.innerHTML = data[0];
+				                   dialogHeader.innerHTML = this.msg("send-mail.doclib.action.sendAsEmail.label");
+				                   this.form.setSubmitAsJSON(false);
 				                 },
 				                 obj: null,
 				                 scope: null
@@ -67,7 +65,7 @@ MailAttachment.Actions = {};
 				               {
 				                  Alfresco.util.PopupManager.displayMessage(
 				                  {
-				                     text: this.msg("HELL YEAH", displayName)
+				                     text: this.msg("send-mail.msg.success")
 				                  });
 				               },
 				               scope: this
@@ -78,13 +76,14 @@ MailAttachment.Actions = {};
 				               {
 				                  Alfresco.util.PopupManager.displayMessage(
 				                  {
-				                     text: this.msg("HELL NO", displayName)
+				                     text: this.msg("send-mail.msg.failure")
 				                  });
 				               },
 				               scope: this
 				            }
 				         });
-				         this.modules.sendEmail.show();
+				
+				this.modules.sendEmail.show();
 			}
 	};
 })();
