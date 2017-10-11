@@ -2,6 +2,7 @@
 
 **TO-DO**
 * Expand info on GitHub page
+* Optionally allow to pick a user from Alfresco
 * Provide release
 * Bootstrap default e-mail template
 * Enhance form visually (Aikau?)
